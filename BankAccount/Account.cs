@@ -37,7 +37,10 @@ namespace BankAccount
         /// Get the current balance
         /// </summary>
         public double Balance { get; private set; }
-
+        /// <summary>
+        /// this is the amount you are removing from bank acount
+        /// </summary>
+        /// <param name="amt">Withdraw Amount</param>   
         public void Withdraw(double amt)
         {
             if(amt < 0)

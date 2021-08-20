@@ -19,116 +19,116 @@ namespace BankAccount.Tests
             acc = new Account();
         }
 
-        [TestMethod]
+        [TestMethod]//1
         //[TestCategory("Deposit")]
-        [DataRow(10_000)]
-        [DataRow(11234.12)]
+        //[Priority(1)]
+        [DataRow(10000)]
+        [DataRow(10001)]
         [DataRow(10000.01)]
-        [DataRow(double.MaxValue)]
         public void Deposit_TooLarge_ThrowsArgumentException(double tooLargeDeposit)
         {
             Assert.ThrowsException<ArgumentException>(() => acc.Deposit(tooLargeDeposit));
         }
 
-        [TestMethod()]
+        [TestMethod()]//2
         //[TestCategory("Deposit")]
-        //[Priority(1)]
         [DataRow(100)]
         [DataRow(9999.99)]
         [DataRow(.01)]
         public void Deposit_PositiveAmount_AddsToBalance(double initialDeposit)
         {
-            // AAA - Arrange Act Assert
+            //AAA - Arrange Act Assert
 
-            // Arrange - Creating variables/object
+            //Arrange - Creating variables/object
             const double startBalance = 0;
 
-            // Act - Execute method under test
+            //Act - Execute method under test
             acc.Deposit(initialDeposit);
 
-            // Assert - Check a condition
+            //Assert - Check a condition
             Assert.AreEqual(startBalance + initialDeposit, acc.Balance);
         }
 
-        [TestMethod]
-        //[TestCategory("Something else")]
+        [TestMethod()]//3
         public void Deposit_PositiveAmount_ReturnsUpdatedBalance()
         {
-            // Arrange
-            double initialBalance = 0;
-            double depositAmount = 10.55;
+            //Arrange
+            const double initialBal = 0;
+            const double depositAmt = 10.55;
 
-            // Act
-            double newBalance = acc.Deposit(depositAmount);
+            //Act
+            double newBalance = acc.Deposit(depositAmt);
 
-            // Assert
-            double expectedBalance = initialBalance + depositAmount;
+            //Assert
+            const double expectedBalance = initialBal + depositAmt;
             Assert.AreEqual(expectedBalance, newBalance);
+
         }
 
-        [TestMethod]
+        //Test - for multiple deposits
+        [TestMethod]//4
         public void Deposit_MultipleAmounts_ReturnsAccumulatedBalance()
         {
-            // Arrange
+            //Arrange
             double deposit1 = 10;
             double deposit2 = 25;
             double expectedBalance = deposit1 + deposit2;
 
-            // Act
+            //Act
             double intermediateBalance = acc.Deposit(deposit1);
             double finalBalance = acc.Deposit(deposit2);
 
-            // Assert
+            //Assert
             Assert.AreEqual(deposit1, intermediateBalance);
             Assert.AreEqual(expectedBalance, finalBalance);
         }
-
-        [TestMethod]
+        //Test - for negative deposits
+        [TestMethod]//5
         public void Deposit_NegativeAmounts_ThrowsArgumentException()
         {
-            // Arrange
-            double negativeDeposit = -1;
+            //Arrange
+            double negativeDep = -5;
 
-            // Assert => Act
+            //Assert and acting here
             Assert.ThrowsException<ArgumentException>
-                (
-                    () => acc.Deposit(negativeDeposit)
-                );
+            (
+                () => acc.Deposit(negativeDep)
+            );
         }
 
-        [TestMethod]
+        [TestMethod]//6
         [DataRow(100, 50)]
-        [DataRow(50, 50)]
+        [DataRow(100, 100)]
         [DataRow(9.99, 9.99)]
         public void Withdraw_PositiveAmount_SubtractsFromBalance(double initialDeposit, double withdrawAmount)
-        {
+        {   //Gets expected Balance
             double expectedBalance = initialDeposit - withdrawAmount;
-
+            //Adds money to balance
             acc.Deposit(initialDeposit);
+            //Removes money from balance
             acc.Withdraw(withdrawAmount);
-
+            // Checks expected outcome with outcome  
             Assert.AreEqual(expectedBalance, acc.Balance);
         }
 
-        [TestMethod]
+        [TestMethod]//7
         public void Withdraw_MoreThanBalance_ThrowsArgumentException()
         {
-            // double initialBalance = 0;
-            // An account created with the default constructor has a 0 balance
+            //double initialBalance = 0;
+            //An account created with the default constructor has a 0 balance
             Account myAccount = new Account();
-            double withdrawAmount = 1000;
-
+            //Try to withdraw $1 from balance of 0
+            double withdrawAmount = 1;
+            //If withdraw is larger than balance throw exception
             Assert.ThrowsException<ArgumentException>(() => myAccount.Withdraw(withdrawAmount));
         }
 
-        [TestMethod]
+        [TestMethod]//8
         public void Withdraw_NegativeAmount_ThrowsArgumentException()
-        {
-            Account myAccount = new Account();
-            double withdrawAmount = -1;
-
-            Assert.ThrowsException<ArgumentException>
-                (() => myAccount.Withdraw(withdrawAmount));
+        {   //Withdrawing negative money trying to make free money 
+            double negativeWith = -5;
+            //If withdraw number is negative throw exception
+            Assert.ThrowsException<ArgumentException>(() => acc.Withdraw(negativeWith));
         }
     }
 }
